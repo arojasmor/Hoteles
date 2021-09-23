@@ -1,2 +1,2 @@
 # Hoteles
-Proyecto de Discovery sobre Hoteles
+En este Proyecto de Discovery se realiza un analisis sobre dos Hoteles...
