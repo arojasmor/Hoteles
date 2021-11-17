@@ -1,4 +1,4 @@
-# Hoteles
+# Generando Insights: Análisis de la Demanda de Reservaciones en Hoteles
 
 En este trabajo hago un Proyecto de Discovery. Este tipo de proyectos van más enfocados al análisis descriptivo y exploratorio, o sea, analizar la data para encontrar tendencias, patrones y anomalías (si es que las hay) que ayuden a generar insights al negocio y asi poder contribuir a que se tomen mejores decisiones. 
 
