@@ -70,7 +70,7 @@ lapply(paquetes, require, character.only = TRUE)
 
 # Datos
 
-La información para este análisis es pública y los datos así como su descripción se encuentran en la página de [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2352340918315191). También, se encuentran en mi repositorio de github.
+La información para este análisis es pública y los datos así como su descripción se encuentran en la página de [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2352340918315191). También, se encuentran en mi repositorio de [github](https://github.com/arojasmor/Hoteles).
 
 Ambos hoteles comparten la misma estructura de datos contenida en 32 variables, el hotel resort tiene 40,060 observaciones y el hotel de ciudad 79,330 observaciones. Cada registro representa una reservación.
 
