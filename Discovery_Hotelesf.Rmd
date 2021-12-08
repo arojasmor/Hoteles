@@ -17,15 +17,19 @@ editor_options:
 
 &nbsp;
 
-# Presentación
+# <span style="color:rgb(0, 0, 205)">Presentación</span>
 
+<div class=text-justify>
 En la presente publicación se expondrá un proyecto de **Discovery**. Este tipo de proyectos van más enfocados al análisis descriptivo y exploratorio, es decir, a analizar la data para encontrar tendencias, patrones y anomalías (si es que las hay) que ayuden a generar insights al negocio y así poder contribuir a que se tomen mejores decisiones. Ahora, lo anterior, no significa que no se pueda complementar con un análisis más avanzado como, por ejemplo, un modelo de machine learning, incluso, desde mi punto de vista, previo a la creación de un modelo analítico avanzado es altamente recomendable, primero, hacer un análisis de discovery, ya que esto permitirá tener un acercamiento y entendimiento al giro del negocio. En resumen, este proyecto será un trabajo de **data mining**.
+</div>
 
-# Contexto
+# <span style="color:rgb(0, 0, 205)">Contexto</span>
 
+<div class=text-justify>
 El análisis se hará a la demanda de reservaciones de dos hoteles ubicados en Lisboa, Portugal. Un **hotel resort** y el otro un **hotel en ciudad**. Dicha información abarca el periodo comprendido entre el 1 de julio de 2015 al 31 de agosto de 2017. Por razones de seguridad y de confidencialidad, se han omitido los datos de identificación tanto de los hoteles como de los clientes.
 
 Supongamos, para fines didácticos, que se nos ha encargado hacer un análisis con la información antes mencionada para encontrar insights que ayuden a mejorar la toma de decisiones así como a la identificación de diferencias o similitudes (si las hay) entre ambos hoteles con el propósito de elaborar estrategias de marketing diferenciadas. Todo lo anteior, para lograr incrementar la rentabilidad del negocio.
+</div>
 
 Por tanto, los objetivos del proyecto serán:
 
@@ -33,7 +37,7 @@ Por tanto, los objetivos del proyecto serán:
 2. Determinar las posibles diferencias entre las demandas en ambos hoteles.
 3. Localizar insights de interés que puedan ayudar a hacer crecer el negocio.
 
-# Set up
+# <span style="color:rgb(0, 0, 205)">Set up</span>
 
 Iniciamos configurando las opciones generales que vamos a requerir para el desarrollo de este proyecto..
 
@@ -54,7 +58,8 @@ paquetes <- c('tidyverse',    # manipulación datos
               'DT',           # visualizción de tablas
               'gridExtra',    # layout de graficos ggplot
               'nortest',      # pruebas estadísticas
-              "summarytools") # estadísticas univariantes
+              "summarytools", # estadísticas univariantes
+              "sfo")          # grafica sankey
 
 instalados <- paquetes %in% installed.packages()
 
@@ -68,7 +73,7 @@ lapply(paquetes, require, character.only = TRUE)
 
 &nbsp;
 
-# Datos
+# <span style="color:rgb(0, 0, 205)">Datos</span>
 
 La información para este análisis es pública y los datos así como su descripción se encuentran en la página de [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2352340918315191). También, se encuentran en mi repositorio de [github](https://github.com/arojasmor/Hoteles).
 
@@ -103,9 +108,9 @@ DT::datatable(t1,
 
 &nbsp;
 
-# Análisis Exploratorio
+# <span style="color:rgb(0, 0, 205)">Análisis Exploratorio</span>
 
-## Tipos de variables
+## <span style="color:rgb(0, 0, 205)">Tipos de variables</span>
 
 Hechemos un primer vistazo a la estructura de las variables para identificar si tienen los tipos correctos o de lo contrario cambiarlos.
 
@@ -116,15 +121,19 @@ glimpse(df)
 
 &nbsp;
 
+<div class=text-justify>
 Con este primer resumen  vemos que hay variables a las que tenemos que cambiarles el tipo como, por ejemplo, la variable hotel, que está como character y es recomendable pasarla a tipo factor, sobre todo para que se nos facilite la creación de gráficos, además, hay algoritmos que necesitan que las variables categóricas estén como factores y aunque en este trabajo no se utilizará ningún algoritmo es bueno tenerlo presente (al menos si se está trabajando con R, pues en Python no se tiene ese detalle ya que no existe el tipo factor).
+</div>
 
 También, vemos a primera vista que hay valores NULL en las variables agent y company.
 
 &nbsp;
 
-## Valores NA y NULL
+## <span style="color:rgb(0, 0, 205)">Valores NA y NULL</span>
 
+<div class=text-justify>
 Ahora, antes de hacer alguna modificación a los tipos es altamente recomendable conocer la cardinalidad de las variables categóricas con el objetivo de identificar desde el inicio del proyecto los posibles datos raros o extraños como espacios o caracteres especiales. Para esto nos apoyaremos de tablas de frecuencias:
+</div>
 
 ```{r EDA2}
 df2 <- df %>% select_if(is.character)
@@ -172,9 +181,11 @@ Después de haber realizado un primer análisis exploratorio lo que debemos hace
 
 &nbsp;
 
-## Outliers y Cardinalidad
+## <span style="color:rgb(0, 0, 205)">Outliers y Cardinalidad</span>
 
+<div class=text-justify>
 En esta parte del análisis exploratorio empezaremos por revisar las variables categóricas o de tipo character. Aquí el objetivo es conocer cómo está conformada la cardinalidad en cada variable, ya que de haber pocas observaciones de una categoría será preferible modificarla y crear grupos.
+</div>
 
 Empecemos con el primer grupo de variables:
 
@@ -231,7 +242,7 @@ En esta segunda parte de variables categóricas, podemos concluir las siguientes
 
 &nbsp;
 
-## Variables discretas
+## <span style="color:rgb(0, 0, 205)">Variables discretas</span>
 
 Ahora, veamos las variables de tipo discreto, o sea, las de tipo entero:
 
@@ -277,7 +288,7 @@ Al analizar visualmente esas variables podemos afirmar que también tenemos que 
 
 &nbsp;
 
-## Variables continuas
+## <span style="color:rgb(0, 0, 205)">Variables continuas</span>
 
 Finalmente, revisamos la única variable continua que tenemos, **adr**:
 
@@ -315,11 +326,11 @@ Con apoyo de las tablas resumen sabemos que es de 5,400. Es una sola observació
 
 &nbsp;
 
-# Transformación de datos
+# <span style="color:rgb(0, 0, 205)">Transformación de datos</span>
 
 A continuación, realizaremos las transformaciones que previamente identificamos en la etapa de exploración.
 
-## Cambiar el tipo de variables
+## <span style="color:rgb(0, 0, 205)">Cambiar el tipo de variables</span>
 
 ```{r}
 # Se prepara el cambio
@@ -350,9 +361,11 @@ Ya tenemos todas las variables con el tipo correcto. La variable adr de origen v
 
 &nbsp;
 
-## Tratamiento de valores NA y NULL
+## <span style="color:rgb(0, 0, 205)">Tratamiento de valores NA y NULL</span>
 
+<div class=text-justify>
 Ya habíamos identificado que en la variable children hay 4 valores NA, por lo que, se procederá a imputarlos por el valor más frecuente (la moda). También, en la variable country se detectaron 488 valores NULL, por lo que, se seguirá la misma estratégia de imputación debido a que son relativamente pocos datos en relacion con el tamaño de la base de datos. En este paso, aprovecharemos para eliminar las variables agent y company, ya que tienen demasiados valores NULL y no conviene realizar algún tipo de imputación: 
+</div>
 
 ```{r}
 # se identifica el valor más frecuente
@@ -378,7 +391,7 @@ df <- df %>%
 
 &nbsp;
 
-## Outlier y Discretización
+## <span style="color:rgb(0, 0, 205)">Outlier y discretización</span>
 
 Como solo se identificó una observacion exrema (5,400), se procederá a eliminarla del dataset:
 
@@ -541,12 +554,15 @@ descr(df$adr,
 
 ```
 
+<div class=text-justify>
 En las gráficas actualizadas, ya podemos apreciar mejor las distribuciones de las variables, pues no hay asimetrías fuertes ni desbalances severos en las variables de tipo factor. Las variables binarias o lógicas se ven bien y la única variable continua aunque presenta valores atípicos ya no hay presencia de valores extremos enmascarados. 
+</div>
 
 &nbsp;
 
-# Creación de variables sintéticas
+# <span style="color:rgb(0, 0, 205)">Creación de variables sintéticas</span>
 
+<div class=text-justify>
 Una de las partes más interesantes en cualquier proyecto de discovery es el de crear variables nuevas a partir de las variables originales, las cuales son comúnmente llamadas variables sintéticas. Estas variables deben de crearse con un sentido de negocio. A continuación, crearemos algunas variables que nos servirán para la etapa de discovery.
 
 En la base de datos no viene una fecha de llegada como tal, o sea, compuesta por el día, mes y año, sin embargo, si tenemos cada componente por separado, por lo que, vamos a crearla.
@@ -569,6 +585,7 @@ En resumen, lo que haremos será crear las siguientes variables:
 - **cambio_habit**: si el valor de reserved_room_type es diferente al de assigned_room_type
 - **noches_totales**: suma de stays_in_weekend_nights más stays_in_week_nights
 - **facturacion_reserva**: lo que se ha facturado en esa reservación como resultado de multiplicar la variable creada noches_totales por adr
+</div>
 
 ```{r}
 df <- df %>% 
@@ -593,15 +610,17 @@ df <- df %>%
 
 &nbsp;
 
-# Discovery y Generación de Insights
+# <span style="color:rgb(0, 0, 205)">Discovery y Generación de Insights</span>
 
 En esta etapa es donde vamos a hacer propiamente el análisis del negocio, pues ya tenemos la data limpia y transformada. Es importante tener presente el tipo de giro o sector, ya que de eso dependerá los insights a buscar.
 
-### Estacionalidad
+### <span style="color:rgb(0, 0, 205)">Estacionalidad</span>
 
+<div class=text-justify>
 Para el sector hotelero y, en general, el turismo, el identificar las llamadas temporadas altas y bajas es muy importante, ya que eso les permitirá prepararse, por ejemplo, para la llegada de masiva de personas (temporada alta) y/o hacer remodelaciones o ampliaciones a su infraestructura (temporada baja).
 
 Técnicamente, para poder determinar si una serie presenta estacionalidad, entendida ésta como tendencias o patrones que se repiten constantemente dentro de un periodo de tiempo, es necesario al memos cuatro años de historia, sin embargo, como no contamos con tanta historia solo nos enfocaremos en el único periodo completo que tenemos, año 2016.
+</div>
 
 Veamos la tendencia del año 2016 en general, para ambos hoteles:
 
@@ -667,7 +686,7 @@ df %>%
 
 &nbsp;
 
-## Análisis de facturación
+## <span style="color:rgb(0, 0, 205)">Análisis de facturación</span>
 
 Para poder analizar la facturación tenemos que trabajar sólo con las reservas que finalmente tuvieron check-out.
 
@@ -706,9 +725,11 @@ df %>%
 ```
 &nbsp;
 
+<div class=text-justify>
 Ya con la tabla podemos concluir que, para el caso del hotel de ciudad, el incremento de su facturación se debió, principalmente, al aumento en el número de reservas (casi 3 veceses más) y, en segundo lugar, al aumento del precio promedio por noche. Para el caso del hotel resort, el incremento en su facturación es debido únicamente al aumento en el número de reservas, porque tanto el número de noches por reserva como el precio promedio por noche presentaron disminuciones.
 
 Veamos cómo está conformada la facturación por segmento de mercado:
+</div>
 
 ```{r message=FALSE}
 df %>% 
@@ -726,6 +747,25 @@ df %>%
 &nbsp;
 
 De la tabla anterior, podemos concluir que la mayor parte de la facturación en ambos hoteles viene por el lado del segmento Online y, por el contrario, el segmento que menos contribuye es el Corporate.
+
+```{r}
+t0 <- df %>% 
+  group_by(hotel, market_segment) %>% 
+  summarise(facturacion_segmento = sum(facturacion_reserva)) %>% 
+  group_by(hotel) %>% 
+  mutate(facturacion_total = sum(facturacion_segmento),
+         porc_facturacion_total = facturacion_segmento / facturacion_total * 100) %>%
+  dplyr::select(-facturacion_total, -porc_facturacion_total)
+
+t0$hotel <- as.character(t0$hotel)
+t0$market_segment <- as.character(t0$market_segment)
+
+sankey_ly(x = t0, 
+          cat_cols = c("hotel", "market_segment"), 
+          num_col = "facturacion_segmento", 
+          title = "Distribución de Ingresos por Segmento Según Tipo de Hotel") 
+
+```
 
 Ahora, analicemos la facturación por familia, para ver la contribución de cada segmento:
 
@@ -745,7 +785,25 @@ df %>%
 
 Claramente se aprecia en el cuadro anterior, que el segmento de parejas sin hijos es el que más contribuye a la facturación total en ambos hoteles.
 
-## Análisis del mercado y del cliente
+```{r}
+t2 <- df %>% 
+  group_by(hotel, familia) %>% 
+  summarise(facturacion_familia = sum(facturacion_reserva)) %>% 
+  group_by(hotel) %>% 
+  mutate(facturacion_total = sum(facturacion_familia),
+         porc_facturacion_total = facturacion_familia / facturacion_total * 100) %>% 
+  dplyr::select(-facturacion_total, -porc_facturacion_total)
+
+t2$hotel <- as.character(t2$hotel)
+
+sankey_ly(x = t2, 
+          cat_cols = c("hotel", "familia"), 
+          num_col = "facturacion_familia", 
+          title = "Distribución de Ingresos por Familia Según Tipo de Hotel") 
+
+```
+
+## <span style="color:rgb(0, 0, 205)">Análisis del mercado y del cliente</span>
 
 En cuanto a los clientes, como ambos hoteles se encuentran en Portugal suponemos que la mayoría son de ese mismo país, sin embargo, hagamos una tabla para ver la distribución entre clientes nacionales y extranjeros:
 
@@ -782,7 +840,7 @@ Como era de esperarse, por país, la mayoría de los clientes de esta cadena de 
 
 &nbsp;
 
-## Análisis de precios
+## <span style="color:rgb(0, 0, 205)">Análisis de precios</span>
 
 A continuación, echemos un vistazo al promedio de los precios por noche:
 
@@ -804,7 +862,7 @@ Por lo anterior, veamos si existe alguna correlación entre el precio promedio y
 
 &nbsp;
 
-# Correlación Reservas vs Precio Medio
+# <span style="color:rgb(0, 0, 205)">Correlación Reservas vs Precio Medio</span>
 
 Vamos hacer un pequeño análisis estadístico de correlación, por lo que, debemos tener presente algunas consideraciones:
 
@@ -812,7 +870,7 @@ Vamos hacer un pequeño análisis estadístico de correlación, por lo que, debe
 2. De acuerdo con el resultado del punto anterior, elegir el coeficiente de correlación que corresponda.
 3. Hacer una prueba de significancia estadística para descartar una posible correlación debido al azar.
 
-## Normalidad:
+## <span style="color:rgb(0, 0, 205)">Normalidad</span>
 
 Análisis visual:
 
@@ -857,7 +915,7 @@ Los resultados muestran que las dos series **no presentan una distribución norm
 
 &nbsp;
 
-## Correlación
+## <span style="color:rgb(0, 0, 205)">Correlación</span>
 
 Coeficiente de Correlación
 
@@ -934,7 +992,9 @@ grid.arrange(gr, gc, nrow = 2, top = "Tendencias Semanales")
 
 ```
 
+<div class=text-justify>
 En las gráficas anteriores, el color de los puntos indica el tiempo (número de semana), entre más claro es el color más cercano al fin de año nos encontramos. Es en el hotel resort donde, en general, no se corresponde la temporada alta con precios promedio elevados, por lo que, sería conveniente analizar la posibilidad de aumentar los precios en temporada alta, o sea, buscar el precio óptimo en ese periodo del año.
+</div>
 
 Veamos la distribución de los precios por tipo de hotel:
 
@@ -974,11 +1034,13 @@ Esta gráfica nos indica que reservando con más de 6 meses de anticipación se 
 
 &nbsp;
 
-# Curva de Pareto 
+# <span style="color:rgb(0, 0, 205)">Curva de Pareto</span>
 
+<div class=text-justify>
 A continuación, se graficará la curva de Pareto de la facturación. Recordando que la curva de pareto consiste en mostrar la regla de que, aproximadamente, el 20% de las observaciones analizadas generan el 80% de sus resultados. Esta regla no es fija y puede variar la distribución, sin embargo, es un buen indicador que permite conocer a los mejores clientes, los más rentables.
 
 Entonces, hagamos una curva de pareto de la facturación por país para conocer la contribución de cada uno al negocio con las siguientes consideraciones: solo crearla para las reservaciones que no fueron canceladas y, también, sin considerar la categoría de OTROS que creamos anteriormente (por su nivel marginal de contribución de cada país que integran esa categoría).
+</div>
 
 ```{r}
 df %>% 
@@ -1008,15 +1070,24 @@ df %>%
                                                   "CN",
                                                   "AUT",
                                                   "SWE")) +
+  ggplot2::annotate("text", 
+           label = "80%-6",
+           x = 5.5, y = 0.83,
+           size = 3, 
+           color = "navyblue") +
   labs(title = "Curva Pareto Facturación")
+
 ```
 
+<div class=text-justify>
 La gráfica nos muestra la contribución, a nivel de país, que tienen los clientes. Ahora, sin considerar a Portugal (por ser el país en donde se encuentran los hoteles), son solo 5 países los que contribuyen a generar casi el 80% de la facturación total: Gran Bretaña, Francia, España, Alemania e Irlanda. Sabiendo esto podemos recomentar focalizar promociones y/o campañas para los turistas de esas nacionalidades.
+</div>
 
 &nbsp;
 
-# Conclusiones
+# <span style="color:rgb(0, 0, 205)">Conclusiones</span>
 
+<div class=text-justify>
 Del análisis anterior, podemos señalar las siguentes conclusiones:
 
 * Como toda empresa que pertenece al giro del turismo sus actividades presentan temporadas de alta y baja demanda, es decir, se ven afectadas por la estacionalidad propia de su sector. En el caso de los hoteles, se detectó estacionalidad (considerando solo el año 2016 por la falta de más información histórica).
@@ -1024,11 +1095,13 @@ Del análisis anterior, podemos señalar las siguentes conclusiones:
 * La mayor parte de la facturación proviene del segmento Online en ambos tipos de hotel, en cambio, el segmento Corporate es el que menor contribuye.
 * El mercado externo (sin considerar a Portugal), son diferentes, ya que mientras en el hotel de ciudad los franceses y alemanes son los clientes que más hacen reservas, en el hotel resort son los británicos y españoles los que más se hospedan.
 * Se presenta estacionalidad en el precio de la reserva, pues es en el periodo comprendido entre las semanas 29 a 35 que los precios son más altos y menor en el resto del año.
+</div>
 
 &nbsp;
 
-# Insights
+# <span style="color:rgb(0, 0, 205)">Insights</span>
 
+<div class=text-justify>
 * La temporada de alta demanda se presenta en los meses de mayo y octubre y, por el contrario, la temporada de menor demanda es en el periodo de diciembre a febrero.
 * El hotel resort tiene un poco más de demanda hasta el primer trimestre del año mientras que en el hotel de ciudad la demanda es mayor en los meses de junio septiembre y octubre.
 * Se podrían incrementar los precios en el hotel resort en temporada alta (inicio de año), ya que éstos se mantienen, en general, constantes. Se tendría que buscar un precio óptimo para ese periodo de tiempo.
@@ -1036,5 +1109,5 @@ Del análisis anterior, podemos señalar las siguentes conclusiones:
 * Existe margen de maniobra para optimizar la política de precios, ya que las curvas de demanda tienen forma bimodal (dos picos durante el periodo de análisis) y, en cambio, la curva de precios solo presenta un pico. Lo anteior, recordando que la lógica de negocio indicaría que en época de alta demanda se pueden aumentar los precios buscando maximizar ganancias.
 * Es en el hotel resort donde el periodo de alta demanda no se corresponde con precios promedio altos, por lo tanto, es en este hotel donde se tendría que arrancar un piloto de optimización de precios.
 * A nivel de país y sin contar el mercado local (Portugal), son cinco países los que contribuyen a generar casi el 80% de la facturación total: Gran Bretaña, Francia, España, Alemania e Irlanda. 
-
+</div>
 
