@@ -10,4 +10,6 @@ El análisis se hará a la demanda de reservaciones de dos hoteles ubicados en L
 
 La información para este análisis es pública y los datos así como su descripción se encuentran en la página de [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2352340918315191).
 
+Para ver el código abrir el archivo Rmd y en una página web pulsar [aquí](https://rpubs.com/arojasmor17/hoteles).
+
 En resumen, este proyecto será un trabajo de **data mining**.
